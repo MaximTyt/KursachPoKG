@@ -889,7 +889,7 @@ void WndResize(int x, int y)
 
 int imusic = 0;
 const int numOfmusic = 3;
-const char* music[numOfmusic] = { "breakout.wav", "sun.wav","sweet.wav" };
+const char* music[numOfmusic] = { "music/breakout.wav", "music/sun.wav","music/sweet.wav" };
 void Game_Init()
 {
 	SoundEngine->play2D(music[imusic], true);
