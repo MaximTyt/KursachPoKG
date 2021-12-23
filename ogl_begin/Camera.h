@@ -1,6 +1,6 @@
 #pragma once
 #include <windows.h>
-#include <gl/gl.h>
+#include <GL/GL.h>
 #include <math.h>
 #include <glm/glm.hpp>
 #include <glm/ext/matrix_transform.hpp>
@@ -102,6 +102,7 @@ public:
 
 	void Camera_AutoMoveByMouse(int centreX, int centreY, float speed)
 	{
+		if (GetForegroundWindow() != hwnd) return;
 		POINT cur;
 		static POINT base = { centreX,centreY };
 		GetCursorPos(&cur);

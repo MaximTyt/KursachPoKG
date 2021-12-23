@@ -665,6 +665,54 @@ void DrawQub()
 	
 }
 
+
+void show_obj()
+{
+	static float alfa = 0;
+	alfa += 0.3;
+	if (alfa > 180) alfa -= 360;
+	PUSH;
+	s[1].UseShader();
+	location = glGetUniformLocationARB(s[1].program, "tex");
+	glUniform1iARB(location, 0);
+	glRotatef(alfa * 10, 1, 1, 1);
+	glTranslated(mapW / 2, mapH / 2, 40);
+	glScaled(0.1, 0.1, 0.1);
+	/*glRotatef(-90, 0, 1, 0);*/
+	Ptero.bindTexture();
+	ptero.DrawObj();
+	s[1].DontUseShaders();
+	POP;
+
+	for (int i = 0; i < keyCnt; i++)
+	{
+
+		PUSH;
+		s[0].UseShader();
+		s[0].setInt("colorMap", 0);
+		s[0].setInt("normalMap", 1);
+		location = glGetUniformLocation(s[0].program, "invRadius");
+		glUniform1fARB(location, 0.0f);
+		location = glGetUniformLocation(s[0].program, "alpha");
+		glUniform1fARB(location, 1.0f);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, colorMap);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, normalMap);
+		ang = fmod(ang + LEVITATION_SPEED, 360);
+		glTranslatef(keyMas[i].x, keyMas[i].y + 0.5f + (sin(ang * (PI / 180))) / 2, Map_GetHeight(keyMas[i].x, keyMas[i].y) + 1.7);
+
+		//glTranslatef(keyMas[i].x, keyMas[i].y, keyMas[i].z);
+		glRotatef(ang, 0.0f, 1.0f, 0.0f);
+		key.DrawObj();
+		s[0].DontUseShaders();
+		glDisable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		POP;
+	}
+	Shader::DontUseShaders();
+}
+
 void Map_Show()
 {	
 	GLfloat amb[] = { 0.2, 0.2, 0.1, 1. };
@@ -682,7 +730,7 @@ void Map_Show()
 	glMaterialf(GL_LIGHT0, GL_SHININESS, sh);
 #define zakat 40.0
 	static float alfa = 0;
-	alfa += 0.3;
+	alfa += 0.03;
 	if (alfa > 180) alfa -= 360;
 
 	float kcc = 1 - fabs(alfa) / 180;
@@ -769,48 +817,9 @@ void Map_Show()
 		DrawQub();
 		POP;
 	}
-
 	PUSH;
-	s[1].UseShader();
-	location = glGetUniformLocationARB(s[1].program, "tex");	
-	glUniform1iARB(location, 0);
-	glRotatef(alfa*10, 1, 1, 1);
-	glTranslated(mapW/2, mapH/2, 40);
-	glScaled(0.1, 0.1, 0.1);
-	/*glRotatef(-90, 0, 1, 0);*/
-	Ptero.bindTexture();
-	ptero.DrawObj();
-	s[1].DontUseShaders();
+	show_obj();
 	POP;
-
-	for (int i = 0; i < keyCnt; i++)
-	{
-		
-		PUSH;
-		s[0].UseShader();
-		s[0].setInt("colorMap", 0);
-		s[0].setInt("normalMap", 1);
-		location = glGetUniformLocation(s[0].program, "invRadius");
-		glUniform1fARB(location, 0.0f);
-		location = glGetUniformLocation(s[0].program, "alpha");
-		glUniform1fARB(location, 1.0f);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, colorMap);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, normalMap);
-		ang = fmod(ang + LEVITATION_SPEED, 360);
-		//glTranslatef(keyMas[i].x, keyMas[i].y + 0.5f + (sin(ang * (PI / 180))) / 2, Map_GetHeight(keyMas[i].x, keyMas[i].y) + 1.7);
-				
-		glTranslatef(keyMas[i].x, keyMas[i].y, keyMas[i].z);
-		glRotatef(ang, 0.0f, 1.0f, 0.0f);
-		key.DrawObj();		
-		s[0].DontUseShaders();
-		glDisable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-		POP;
-	}
-	Shader::DontUseShaders();
-	
 	if(RedactorMode)
 		Cur_Show();
 	else
@@ -965,18 +974,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		return 0;
 
 	/* create main window */
-	hwnd = CreateWindowEx(0,
-		"GLSample",
-		"Kursach",
-		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		1920,
-		1080,
-		NULL,
-		NULL,
-		hInstance,
-		NULL);
+	hwnd = CreateWindowEx(WS_EX_TOPMOST, "GLSample",
+		"Kursach", WS_VISIBLE | WS_POPUP | WS_MAXIMIZE, CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080, HWND_DESKTOP, NULL, hInstance, 0);
 
 	ShowWindow(hwnd, nCmdShow);
 

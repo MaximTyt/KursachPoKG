@@ -3,7 +3,7 @@
 
 #include <string>
 #include <windows.h>
-#include <GL\GL.h>
+#include <GL/GL.h>
 
 class Texture
 {

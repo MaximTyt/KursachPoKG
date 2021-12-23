@@ -1,6 +1,6 @@
 
 #include "Texture.h"
-#include <GL\GLU.h>
+#include <GL/GLU.h>
 
 
 

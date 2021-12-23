@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <gl/GL.h>
+#include <GL/GL.h>
 #include <irrKlang/irrKlang.h>
 #include "MyShaders.h"
 #include "ObjLoader.h"
