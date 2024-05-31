@@ -490,7 +490,7 @@ void Map_Init()
 		for (int j = 0; j < mapH - 1; j++)
 			CalcNormals(map[i][j], map[i + 1][j], map[i][j + 1], &mapNormal[i][j]);
 	int travaN = 20000;
-	int gribN = 50;
+	int gribN = 500;
 	plantCnt = travaN + gribN;
 	plantMas = (TObject*)realloc(plantMas, sizeof(*plantMas) * plantCnt);
 	if (plantMas != NULL)
@@ -519,7 +519,7 @@ void Map_Init()
 		free(plantMas);
 	}
 
-	treeCnt = 150;
+	treeCnt = 50;
 	tree = (TObjGroup*)realloc(tree, sizeof(*tree) * treeCnt);
 	if (tree != NULL)
 		for (int i = 0; i < treeCnt; i++)
@@ -533,7 +533,7 @@ void Map_Init()
 	}
 
 
-	pumpCnt = 80;
+	pumpCnt = 800;
 	pumpMas = (TObject*)realloc(pumpMas, sizeof(*pumpMas) * pumpCnt);
 	if (pumpMas != NULL)
 		for (int i = 0; i < pumpCnt; i++)
@@ -673,8 +673,8 @@ void show_obj()
 	if (alfa > 180) alfa -= 360;
 	PUSH;
 	s[1].UseShader();
-	location = glGetUniformLocationARB(s[1].program, "tex");
-	glUniform1iARB(location, 0);
+	location = glGetUniformLocationARB_ptr(s[1].program, "tex");
+	glUniform1iARB_ptr(location, 0);
 	glRotatef(alfa * 10, 1, 1, 1);
 	glTranslated(mapW / 2, mapH / 2, 40);
 	glScaled(0.1, 0.1, 0.1);
@@ -691,13 +691,13 @@ void show_obj()
 		s[0].UseShader();
 		s[0].setInt("colorMap", 0);
 		s[0].setInt("normalMap", 1);
-		location = glGetUniformLocation(s[0].program, "invRadius");
-		glUniform1fARB(location, 0.0f);
-		location = glGetUniformLocation(s[0].program, "alpha");
-		glUniform1fARB(location, 1.0f);
-		glActiveTexture(GL_TEXTURE0);
+		location = glGetUniformLocation_ptr(s[0].program, "invRadius");
+		glUniform1fARB_ptr(location, 0.0f);
+		location = glGetUniformLocation_ptr(s[0].program, "alpha");
+		glUniform1fARB_ptr(location, 1.0f);
+		glActiveTexture_ptr(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, colorMap);
-		glActiveTexture(GL_TEXTURE1);
+		glActiveTexture_ptr(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, normalMap);
 		ang = fmod(ang + LEVITATION_SPEED, 360);
 		glTranslatef(keyMas[i].x, keyMas[i].y + 0.5f + (sin(ang * (PI / 180))) / 2, Map_GetHeight(keyMas[i].x, keyMas[i].y) + 1.7);
@@ -707,7 +707,7 @@ void show_obj()
 		key.DrawObj();
 		s[0].DontUseShaders();
 		glDisable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
+		glActiveTexture_ptr(GL_TEXTURE0);
 		POP;
 	}
 	Shader::DontUseShaders();
@@ -730,7 +730,7 @@ void Map_Show()
 	glMaterialf(GL_LIGHT0, GL_SHININESS, sh);
 #define zakat 40.0
 	static float alfa = 0;
-	alfa += 0.03;
+	alfa += 0.13;
 	if (alfa > 180) alfa -= 360;
 
 	float kcc = 1 - fabs(alfa) / 180;
@@ -848,7 +848,7 @@ void Game_Move()
 {		
 	if (!RedactorMode)
 	{
-		camera.Camera_MoveDirection(0.3);
+		camera.Camera_MoveDirection(0.7);
 		camera.Camera_AutoMoveByMouse(400, 300, 0.2);
 		camera.pos.z = Map_GetHeight(camera.pos.x, camera.pos.y) + 2.7;
 		
