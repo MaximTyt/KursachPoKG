@@ -6,7 +6,7 @@
 #include "ObjLoader.h"
 #include "Texture.h"
 using namespace irrklang;
-#pragma comment(lib, "irrKlang.lib")
+
 ISoundEngine* SoundEngine = createIrrKlangDevice();
 float kube[] = { 0,0,0, 0,1,0, 1,1,0, 1,0,0, 0,0,1, 0,1,1, 1,1,1, 1,0,1 };
 GLuint kubeInd[] = { 0,1,2, 2,3,0, 4,5,6, 6,7,4, 3,2,5, 6,7,3, 0,1,5,
@@ -34,8 +34,8 @@ typedef struct {
 	int type;
 }TObjGroup;
 
-#define mapW 150
-#define mapH 150
+#define mapW 1000
+#define mapH 1000
 TCell map[mapW][mapH];
 TCell mapNormal[mapW][mapH];
 TUV mapUV[mapW][mapH];
